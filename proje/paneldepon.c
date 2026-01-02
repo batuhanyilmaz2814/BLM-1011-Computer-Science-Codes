@@ -9,12 +9,12 @@ int main(){
     srand(time(NULL));
     int secim = 0;
     int i,j;
-    int N,M;
+    int N,M,tempN,tempM; 
     char oyun_alani[20][20];
     int oyun_modu;
     int D1X,D1Y,D2X,D2Y;
     int PX,PY;
-    int ust_satir = -1;
+    int ust_satir;
     do{
     printf("Matris boyutlarını giriniz: \n");
     printf("Satir sayisi(En fazla 20): ");
@@ -26,7 +26,9 @@ int main(){
         printf("Hatali matris boyutu girisi lutfen tekrar giris yapin.\n");}
     }while(N<2 || N>20 || M<2 || M>20);
 
-
+    tempM = M;
+    tempN = N;
+    ust_satir = N/2;
     printf("Oyun modunu seciniz: \n 1-Oyun Modu \n 2-Kontrol Modu\n");
         scanf("%d",&oyun_modu);
 
@@ -45,30 +47,55 @@ int main(){
         }
 
         while(secim != 3 && ust_satir != 0){
-            ust_satir = N/2;
 
             yazdirma(oyun_alani,N,M);
             
-            printf("Yer degisikligi icin 1,\n Patlatma icin 2 giriniz:\n");
+            printf("Giris Yapiniz:\nYer degisikligi icin 1\n Patlatma icin 2\nCikis icin 3\n");
             scanf("%d",&secim);
             if(secim == 1){
                 printf("Yer degistirmek istediğiniz ilk nesnenin satir numarasini girin: ");
                 scanf("%d",&D1X);
+                D1X = D1X + ust_satir;
                 printf("Yer degistirmek istediğiniz ilk nesnenin sutun numarasini girin: ");
                 scanf("%d",&D1Y);
                 printf("Yer degistirmek istediğiniz ikinci nesnenin satir numarasini girin: ");
                 scanf("%d",&D2X);
+                D2X = D2X + ust_satir;
                 printf("Yer degistirmek istediğiniz ikinci nesnenin sutun numarasini girin: ");
                 scanf("%d",&D2Y);
 
                 char temp = oyun_alani[D1X-1][D1Y-1];
                 oyun_alani[D1X-1][D1Y-1] = oyun_alani[D2X-1][D2Y-1];
                 oyun_alani[D2X-1][D2Y-1] = temp;
+
+                for(i=ust_satir; i<N; i++){
+                for(j=0; j<M; j++){
+                    oyun_alani[i-1][j] = oyun_alani[i][j];
+                }
+            }
+
+            for(j=0; j<M; j++){
+                oyun_alani[N-1][j] = rastgele_olusum();
+            }
+               /* yazdirma(oyun_alani,N,M);*/
+               int satir_kontrol = 0;
+                ust_satir = ust_satir - 1;
+                for(j=0; j<M; j++){
+                    if(oyun_alani[ust_satir][j] == ' '){
+                        satir_kontrol = satir_kontrol + 1;
+                    }
+                }
+                if(satir_kontrol == M){
+                    ust_satir = ust_satir + 1;
+                }
+                
             }else if(secim == 2){
                 printf("Patlatmak istediginiz grubun sol ust kosesinin satir numarasini girin: ");
                 scanf("%d",&PX);
                 printf("Patlatmak istediginiz grubun sol ust kosesinin sutun numarasini girin: ");
                 scanf("%d",&PY);
+
+                PX = PX + ust_satir;
 
                 char patlatma_karakter = oyun_alani[PX-1][PY-1];
                 
@@ -108,15 +135,18 @@ int main(){
                     }
                     
                     for(int j = 0; j < M; j++){
-                        for(int i = N - 1; i >= 0; i--){
-                            if(oyun_alani[i][j] == ' '){
-                                for(int k = i - 1; k >= 0; k--){
-                                    if(oyun_alani[k][j] != ' '){
-                                        oyun_alani[i][j] = oyun_alani[k][j];
-                                        oyun_alani[k][j] = ' ';
-                                    }
+                        int yaz = N - 1;
+                        for(int oku = N - 1; oku >= 0; oku--){
+                            if(oyun_alani[oku][j] != ' '){
+                                oyun_alani[yaz][j] = oyun_alani[oku][j];
+                                if(yaz != oku){
+                                    oyun_alani[oku][j] = ' ';
                                 }
+                                yaz--;
                             }
+                        }
+                        for(int kalan = yaz; kalan >= 0; kalan--){
+                            oyun_alani[kalan][j] = ' ';
                         }
                     }
                 } else {
@@ -124,11 +154,15 @@ int main(){
                 }
             }
 
-            printf("\033[H\033[J");
-            yazdirma(oyun_alani,N,M);
-            ust_satir = ust_satir - 1;
         
+            
         }
+
+
+            if(secim == 3){
+                printf("Oyun bitti. Tesekkurler!\n");}
+            if(ust_satir == 0){
+                printf("Oyun alani doldu. Oyun bitti!\n");}
 
     }
 
@@ -167,3 +201,6 @@ void yazdirma(char oyun_alani[20][20], int N, int M){
         printf("\n");
     }
 }
+
+
+    
