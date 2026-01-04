@@ -7,7 +7,7 @@ void yazdirma(char oyun_alani[20][20], int N, int M);
 int main(){
     srand(42); /*Hayatın, evrenin ve her şeyin anlamı.*/
     int secim = 0;
-    int i,j;
+    int i,j,k;
     int N,M,tempN,tempM; 
     char oyun_alani[20][20];
     int oyun_modu;
@@ -16,6 +16,9 @@ int main(){
     int ust_satir;
     int yer_degisikligi = 0;
     int patlatma_sayisi = 0;
+
+    printf("--------Panel De Pon Oyununa Hosgeldiniz--------\n ");
+
     do{
     printf("Matris boyutlarini giriniz: \n");
     printf("Satir sayisi(En fazla 20): ");
@@ -23,9 +26,9 @@ int main(){
     printf("Sutun sayisi(En fazla 20): ");
     scanf("%d",&M);
 
-    if(N<2 || N>20 || M<2 || M>20){
+    if(N<3 || N>20 || M<3 || M>20){
         printf("Hatali matris boyutu girisi lutfen tekrar giris yapin.\n");}
-    }while(N<2 || N>20 || M<2 || M>20);
+    }while(N<3 || N>20 || M<3 || M>20);
 
     tempM = M;
     tempN = N;
@@ -64,7 +67,17 @@ int main(){
     if(oyun_modu == 1 || oyun_modu == 2){
         while(secim != 3 && ust_satir != 0){
 
-            yazdirma(oyun_alani,N,M);
+            
+
+            if(oyun_modu == 2){
+                yazdirma(oyun_alani,N,M);}
+
+            if(oyun_modu == 1) {
+                        for(k=0; k<50; k++) printf("\n"); 
+                        yazdirma(oyun_alani,N,M); 
+            }
+            printf("Yer degisikligi: %d\n",yer_degisikligi);
+            printf("Patlatma sayisi: %d\n",patlatma_sayisi);
             
             printf("Giris Yapiniz:\nYer degisikligi icin 1\n Patlatma icin 2\nCikis icin 3\n");
             scanf("%d",&secim);
@@ -111,6 +124,7 @@ int main(){
                     yer_degisikligi = yer_degisikligi + 1;
                     printf("Yer degisikligi: %d\n",yer_degisikligi);
                     printf("Patlatma sayisi: %d\n",patlatma_sayisi);
+                    printf("\nTaslar degisti... Yeni satir geliyor...\n");
                 }
                 
             }else if(secim == 2){
@@ -181,8 +195,6 @@ int main(){
                             }
                         }
                         
-                        printf("Yer degisikligi: %d\n",yer_degisikligi);
-                        printf("Patlatma sayisi: %d\n",patlatma_sayisi);
                     } else {
                         printf("Bu koordinatta en az 3 ayni tas arka arka degil!\n");
                     }
